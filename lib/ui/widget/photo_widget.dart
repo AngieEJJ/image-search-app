@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:image_search/model/photo.dart';
 
 class PhotoWidget extends StatelessWidget {
-  const PhotoWidget({super.key});
+  final Photo photo;
+
+  const PhotoWidget({
+    Key? key,
+    required this.photo,
+  }): super(key: key);
+
+
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.0),
-        image: const DecorationImage(
+        image:  DecorationImage(
           fit: BoxFit.cover,
           image: NetworkImage(
-              'https://pbs.twimg.com/media/GAALXGibsAEI8cD?format=jpg&name=large'),
+              photo.previewURL!),
         ),
       ),
     );
   }
+
 }

@@ -1,9 +1,34 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:image_search/model/photo.dart';
+import 'package:http/http.dart' as http;
 import 'widget/photo_widget.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  Future<List<Photo>> fetch(String query) async {
+    final response = await http.get(Uri.parse(
+        'https://pixabay.com/api/?key=41487259-59b1e614313376c6d9c201e9c&q=$query&image_type=photo'));
+    // print(response.body);
+    // print(jsonDecode(response.body));
+    Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+    // print(jsonResponse['hits'].runtimeType);
+    List hits = jsonResponse['hits'];
+    return hits.map((e) => Photo.fromJson(e)).toList();
+  }
+
+  @override
+  void initState() {
+    fetch('query');
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +70,7 @@ class HomeScreen extends StatelessWidget {
                     mainAxisSpacing: 32,
                   ),
                   itemBuilder: (context, index) {
-                    return const PhotoWidget();
+                    return Container();
                   }),
             ),
           ],
